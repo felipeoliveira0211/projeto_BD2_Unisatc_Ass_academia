@@ -1,0 +1,123 @@
+1. Qual academia possui mais alunos cadastrados?
+
+SELECT
+    a.nome AS academia,
+    COUNT(al.id) AS total_alunos
+FROM academias a
+INNER JOIN alunos al
+    ON a.id = al.id_academia_registro
+GROUP BY a.nome
+ORDER BY total_alunos DESC;
+------------------------
+CREATE INDEX IX_Alunos_Academia
+ON alunos(id_academia_registro);
+
+2. Quais são os planos mais vendidos?
+
+SELECT TOP 5
+    p.nome,
+    COUNT(a.id) AS total_vendas
+FROM planos p
+INNER JOIN assinaturas a
+    ON p.id = a.id_plano
+GROUP BY p.nome
+ORDER BY total_vendas DESC;
+----------------------
+CREATE INDEX IX_Assinaturas_Plano
+ON assinaturas(id_plano);
+
+3. Quais alunos estão inadimplentes?
+
+SELECT
+    al.nome_completo,
+    fp.valor_fatura,
+    fp.data_vencimento
+FROM alunos al
+INNER JOIN assinaturas ass
+    ON al.id = ass.id_aluno
+INNER JOIN faturas_pagamento fp
+    ON ass.id = fp.id_assinatura
+WHERE fp.status_pagamento = '3';
+--------------------------------
+CREATE INDEX IX_Faturas_Status
+ON faturas_pagamento(status_pagamento);
+
+4. Qual funcionário realizou mais vendas de assinaturas?
+WITH RankingVendas AS
+(
+    SELECT
+        f.nome_completo,
+        COUNT(a.id) AS total_vendas,
+        ROW_NUMBER() OVER
+        (
+            ORDER BY COUNT(a.id) DESC
+        ) AS ranking
+    FROM funcionarios f
+    INNER JOIN assinaturas a
+        ON f.id = a.id_funcionario_venda
+    GROUP BY f.nome_completo
+)
+
+SELECT *
+FROM RankingVendas;
+--------------------------------
+CREATE INDEX IX_Assinaturas_Funcionario
+ON assinaturas(id_funcionario_venda);
+
+5. Qual academia registrou mais acessos na catraca no último mês?
+WITH AcessosMes AS
+(
+    SELECT
+        id_academia,
+        COUNT(*) AS total_acessos
+    FROM acessos_catraca
+    WHERE MONTH(data_hora_entrada) = MONTH(GETDATE())
+      AND YEAR(data_hora_entrada) = YEAR(GETDATE())
+    GROUP BY id_academia
+)
+
+SELECT
+    a.nome,
+    am.total_acessos
+FROM AcessosMes am
+INNER JOIN academias a
+    ON am.id_academia = a.id
+ORDER BY am.total_acessos DESC;
+------------------------------
+CREATE INDEX IX_Acessos_DataAcademia
+ON acessos_catraca(id_academia, data_hora_entrada);
+
+6. Quais alunos possuem assinaturas próximas do vencimento?
+
+SELECT
+    al.nome_completo,
+    p.nome AS plano,
+    a.data_fim,
+    DATEDIFF(DAY, GETDATE(), a.data_fim) AS dias_para_vencer
+FROM alunos al
+INNER JOIN assinaturas a
+    ON al.id = a.id_aluno
+INNER JOIN planos p
+    ON a.id_plano = p.id
+WHERE a.data_fim BETWEEN GETDATE() AND DATEADD(DAY, 30, GETDATE())
+ORDER BY a.data_fim;
+--------------------------------------------------------
+CREATE INDEX IX_Assinaturas_DataFim
+ON assinaturas(data_fim);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
