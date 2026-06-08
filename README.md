@@ -1,5 +1,5 @@
 # projeto_BD2_Unisatc_Ass_Academia
-# 🏋️ Sistema de Gestão para Academias
+#  Sistema de Gestão para Academias
 ### Projeto Sistema de Atividades Especiais — GRUPO A
 
 Este projeto consiste na criação de um modelo físico de um banco de dados para um sistema de gestão para Academias. Desenvolvido em SQL, o projeto implementa um CRUD para cadastro e gerenciamento dos dados do sistema, onde a aplicação realiza conexão com o banco de dados através da biblioteca **Entity Framework** e executa operações de adição, atualização e deleção dos dados, aplicando todos os conceitos e dinâmicas práticas de SQL desenvolvidas em aula.
@@ -17,7 +17,7 @@ Este projeto consiste na criação de um modelo físico de um banco de dados par
 
 ---
 
-## 🗂️ Modelo Físico
+##  Modelo Físico
 
 Utilizamos a ferramenta [drawSQL](https://drawsql.app/) para a criação do modelo físico do banco de dados, com posterior exportação dos scripts DDL das tabelas e relacionamentos.
 
@@ -28,35 +28,35 @@ Utilizamos a ferramenta [drawSQL](https://drawsql.app/) para a criação do mode
 
 ---
 
-## 📖 Dicionário de Dados
+##  Dicionário de Dados
 
 As informações sobre as tabelas e índices foram documentadas nas planilhas:
 
-- 📊 [`Dicionario_pt1.xlsx`](https://github.com/felipeoliveira0211/projeto_BD2_Unisatc_Ass_academia/blob/main/Dicionario_dados/Dicionario_pt1.xlsx)
-- 📊 [`Dicionario_pt2.xlsx`](https://github.com/felipeoliveira0211/projeto_BD2_Unisatc_Ass_academia/blob/main/Dicionario_dados/Dicionario_pt2.xlsx)
+-  [`Dicionario_pt1.xlsx`](https://github.com/felipeoliveira0211/projeto_BD2_Unisatc_Ass_academia/blob/main/Dicionario_dados/Dicionario_pt1.xlsx)
+-  [`Dicionario_pt2.xlsx`](https://github.com/felipeoliveira0211/projeto_BD2_Unisatc_Ass_academia/blob/main/Dicionario_dados/Dicionario_pt2.xlsx)
 
 ---
 
-## 🛠️ Scripts SQL
+##  Scripts SQL
 
 O banco de dados utilizado neste projeto é o **SQL Server**.
 
-📄 Procedure de criação do banco: [Criando SQL](./scripts/criacao-banco.sql)
+ Procedure de criação do banco: [Criando SQL](./scripts/criacao-banco.sql)
 
 Os scripts estão organizados por tipo:
 
 | Tipo | Arquivo |
 |------|---------|
-| 📋 Tabelas | [`scripts/tabelas.sql`](./scripts/tabelas.sql) |
-| 🔍 Índices | [`scripts/indices.sql`](./scripts/indices.sql) |
-| ⚡ Gatilhos | [`scripts/gatilhos.sql`](./scripts/gatilhos.sql) |
-| 📦 Procedimentos Armazenados | [`scripts/procedures.sql`](./scripts/procedures.sql) |
-| 🔧 Funções | [`scripts/funcoes.sql`](./scripts/funcoes.sql) |
-| 📝 DML | [`scripts/dml.sql`](./scripts/dml.sql) |
+|  Tabelas | [`scripts/tabelas.sql`](./scripts/tabelas.sql) |
+|  Índices | [`scripts/indices.sql`](./scripts/indices.sql) |
+|  Gatilhos | [`scripts/gatilhos.sql`](./scripts/gatilhos.sql) |
+|  Procedimentos Armazenados | [`scripts/procedures.sql`](./scripts/procedures.sql) |
+|  Funções | [`scripts/funcoes.sql`](./scripts/funcoes.sql) |
+|  DML | [`scripts/dml.sql`](./scripts/dml.sql) |
 
 ---
 
-## 💻 Código Fonte do CRUD
+##  Código Fonte do CRUD
 
 ### Tecnologias utilizadas
 
@@ -65,11 +65,11 @@ Os scripts estão organizados por tipo:
 - **ORM:** Entity Framework
 - **Ferramenta de Modelagem:** drawSQL
 
-> ⚠️ *Adicione aqui as demais tecnologias utilizadas no desenvolvimento do CRUD.*
+>  *Adicione aqui as demais tecnologias utilizadas no desenvolvimento do CRUD.*
 
 ---
 
-## ▶️ Passos para Execução do CRUD
+##  Passos para Execução do CRUD
 
 Siga as instruções abaixo para reproduzir o projeto em sua máquina.
 
@@ -87,25 +87,25 @@ cd seu-repositorio
 -- scripts/criacao-banco.sql
 ```
 
-> ⚠️ *Adicione aqui as demais instruções de configuração e execução.*
+>  *Adicione aqui as demais instruções de configuração e execução.*
 
 ---
 
-## 📁 Código Fonte
+##  Código Fonte
 
 O código fonte completo está disponível na pasta [`/src`](./src/).
 
 ---
 
-## 📄 Relatório Final
+##  Relatório Final
 
 O relatório final está disponível em [`relatorio-final/template1.docx`](./relatorio-final/template1.docx).
 
 ---
 
-## 📚 Referências Bibliográficas
+##  Referências Bibliográficas
 
-> ⚠️ *Adicione aqui as referências de artigos, links, vídeos, repositórios e livros utilizados no desenvolvimento do projeto.*
+>  *Adicione aqui as referências de artigos, links, vídeos, repositórios e livros utilizados no desenvolvimento do projeto.*
 
 ---
 
