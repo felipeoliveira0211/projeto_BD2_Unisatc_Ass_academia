@@ -6,7 +6,7 @@ Este projeto consiste na criação de um modelo físico de um banco de dados par
 
 ---
 
-## 👥 Integrantes
+##  Integrantes
 
 | Nome | GitHub |
 |------|--------|
@@ -21,7 +21,7 @@ Este projeto consiste na criação de um modelo físico de um banco de dados par
 
 Utilizamos a ferramenta [drawSQL](https://drawsql.app/) para a criação do modelo físico do banco de dados, com posterior exportação dos scripts DDL das tabelas e relacionamentos.
 
-📄 Arquivo fonte: [Modelo Fisico](./modelo-fisico/)
+ Arquivo fonte: [Modelo Fisico](./modelo-fisico/)
 
 <!-- Insira abaixo a imagem do modelo físico -->
 ![Modelo Físico do Banco de Dados](./modelo-fisico/drawSQL-image-export-2026-05-30.jpg)
