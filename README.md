@@ -32,8 +32,8 @@ Utilizamos a ferramenta [drawSQL](https://drawsql.app/) para a criação do mode
 
 As informações sobre as tabelas e índices foram documentadas nas planilhas:
 
-- 📊 [`Dicionario_pt1.xlsx`](./dicionario-dados/Dicionario_pt1.xlsx)
-- 📊 [`Dicionario_pt2.xlsx`](./dicionario-dados/Dicionario_pt2.xlsx)
+- 📊 [`Dicionario_pt1.xlsx`](https://github.com/felipeoliveira0211/projeto_BD2_Unisatc_Ass_academia/blob/main/Dicionario_dados/Dicionario_pt1.xlsx)
+- 📊 [`Dicionario_pt2.xlsx`](https://github.com/felipeoliveira0211/projeto_BD2_Unisatc_Ass_academia/blob/main/Dicionario_dados/Dicionario_pt2.xlsx)
 
 ---
 
