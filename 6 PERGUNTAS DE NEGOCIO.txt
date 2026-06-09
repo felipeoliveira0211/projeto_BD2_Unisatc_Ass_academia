@@ -105,6 +105,20 @@ ORDER BY a.data_fim;
 CREATE INDEX IX_Assinaturas_DataFim
 ON assinaturas(data_fim);
 
+----NOVAS PERGUNTAS-----
+
+1. Quais os principais canais de vendas dos planos?
+
+2. Quais são os planos mais vendidos e quais geram mais receita?
+
+3. Qual é o pico de horário de acessos nas catracas?
+
+4. Quantos alunos novos foram captados por mês na academia?
+
+5. Qual funcionário mais vendeu assinaturas e qual a receita gerada?
+
+6. 
+
 
 
 
