@@ -1,6 +1,4 @@
-/* ==========================================================
-   TABELAS AUXILIARES
-========================================================== */
+/* TABELAS AUXILIARES */
 
 CREATE TABLE cargos (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -19,10 +17,7 @@ CREATE TABLE motivos_cancelamento (
 );
 
 
-
-/* ==========================================================
-   DISPOSITIVOS DE CATRACA
-========================================================== */
+/* DISPOSITIVOS DE CATRACA */
 
 CREATE TABLE dispositivos_catraca (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -39,10 +34,7 @@ CREATE TABLE dispositivos_catraca (
 );
 
 
-
-/* ==========================================================
-   PLANOS
-========================================================== */
+/* PLANOS */
 
 CREATE TABLE planos (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -65,10 +57,7 @@ CREATE TABLE planos (
 );
 
 
-
-/* ==========================================================
-   FUNCIONÁRIOS
-========================================================== */
+/* FUNCIONÁRIOS */
 
 CREATE TABLE funcionarios (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -103,13 +92,13 @@ CREATE TABLE funcionarios (
 
     CONSTRAINT CK_FUNCIONARIO_TURNO
         CHECK (turno_trabalho IN ('D','N'))
+
+    -- D = Diurno
+    -- N = Noturno
 );
 
 
-
-/* ==========================================================
-   ALUNOS
-========================================================== */
+/* ALUNOS */
 
 CREATE TABLE alunos (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -135,14 +124,14 @@ CREATE TABLE alunos (
     ativo BIT NOT NULL DEFAULT 1,
 
     CONSTRAINT CK_ALUNO_GENERO
-        CHECK (genero IN ('M','F','N'))
+        CHECK (genero IN ('M','F'))
+
+    -- M = Masculino
+    -- F = Feminino
 );
 
 
-
-/* ==========================================================
-   ASSINATURAS
-========================================================== */
+/* ASSINATURAS */
 
 CREATE TABLE assinaturas (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -194,14 +183,14 @@ CREATE TABLE assinaturas (
         REFERENCES motivos_cancelamento(id),
 
     CONSTRAINT CK_STATUS_ASSINATURA
-        CHECK (status_assinatura IN ('A','S','C','E'))
+        CHECK (status_assinatura IN ('A','I'))
+
+    -- A = Ativa
+    -- I = Inativa
 );
 
 
-
-/* ==========================================================
-   FATURAS
-========================================================== */
+/* FATURAS */
 
 CREATE TABLE faturas_pagamento (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -235,14 +224,14 @@ CREATE TABLE faturas_pagamento (
         REFERENCES metodos_pagamento(id),
 
     CONSTRAINT CK_STATUS_PAGAMENTO
-        CHECK (status_pagamento IN ('P','Q','A','C','E'))
+        CHECK (status_pagamento IN ('P','C'))
+
+    -- P = Pendente
+    -- C = Concluído
 );
 
 
-
-/* ==========================================================
-   AVALIAÇÕES FÍSICAS
-========================================================== */
+/* AVALIAÇÕES FÍSICAS */
 
 CREATE TABLE avaliacoes_fisicas (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -277,10 +266,7 @@ CREATE TABLE avaliacoes_fisicas (
 );
 
 
-
-/* ==========================================================
-   ACESSOS CATRACA
-========================================================== */
+/* ACESSOS CATRACA */
 
 CREATE TABLE acessos_catraca (
     id BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -312,6 +298,12 @@ CREATE TABLE acessos_catraca (
     CONSTRAINT CK_SENTIDO_ACESSO
         CHECK (sentido_acesso IN ('E','S')),
 
+    -- E = Entrada
+    -- S = Saída
+
     CONSTRAINT CK_TIPO_ACESSO
-        CHECK (tipo_acesso IN ('N','V','M','B'))
+        CHECK (tipo_acesso IN ('A','V'))
+
+    -- A = Aluno
+    -- V = Visitante
 );
