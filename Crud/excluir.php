@@ -1,0 +1,1 @@
+<!-- Código PHP oculto que deleta o registro -->

@@ -1,0 +1,1 @@
+<!-- Código PHP oculto que processa a alteração no banco -->
