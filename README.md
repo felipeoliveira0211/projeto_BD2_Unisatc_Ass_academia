@@ -1,5 +1,5 @@
 
-#  Sistema de Gestão para Academias 3GFIT
+#  Sistema de Gestão para Academia 3GFIT
 ### Projeto Sistema de Atividades Especiais 
 
 O Sistema de Gestão para Academia 3GFIT consiste no desenvolvimento de um banco de dados relacional para gerenciamento das operações de uma academia. O projeto foi modelado e implementado utilizando SQL Server, aplicando conceitos de modelagem de dados, normalização, integridade referencial, chaves primárias e estrangeiras, além de restrições para garantir a consistência das informações.
