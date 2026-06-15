@@ -1,8 +1,12 @@
-# projeto_BD2_Unisatc_Ass_Academia
-#  Sistema de Gestão para Academias
-### Projeto Sistema de Atividades Especiais — GRUPO A
 
-Este projeto consiste na criação de um modelo físico de um banco de dados para um sistema de gestão para Academias. Desenvolvido em SQL, o projeto implementa um CRUD para cadastro e gerenciamento dos dados do sistema, onde a aplicação realiza conexão com o banco de dados através da biblioteca **Entity Framework** e executa operações de adição, atualização e deleção dos dados, aplicando todos os conceitos e dinâmicas práticas de SQL desenvolvidas em aula.
+#  Sistema de Gestão para Academias 3GFIT
+### Projeto Sistema de Atividades Especiais 
+
+O Sistema de Gestão para Academia 3GFIT consiste no desenvolvimento de um banco de dados relacional para gerenciamento das operações de uma academia. O projeto foi modelado e implementado utilizando SQL Server, aplicando conceitos de modelagem de dados, normalização, integridade referencial, chaves primárias e estrangeiras, além de restrições para garantir a consistência das informações.
+
+O sistema contempla operações de CRUD (Create, Read, Update e Delete), desenvolvidas em PHP, permitindo o gerenciamento dos dados armazenados no banco de dados. Entre as principais funcionalidades estão o cadastro de alunos, funcionários, planos, assinaturas, pagamentos, avaliações físicas e controle de acesso por catraca.
+
+Este projeto foi desenvolvido como atividade acadêmica com o objetivo de aplicar, na prática, os conhecimentos adquiridos na disciplina de Banco de Dados, integrando conceitos de modelagem, implementação e manipulação de dados.
 
 ---
 
