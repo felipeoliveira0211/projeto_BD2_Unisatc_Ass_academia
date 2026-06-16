@@ -28,8 +28,7 @@ Utilizamos a ferramenta [drawSQL](https://drawsql.app/) para a criação do mode
  Arquivo fonte: [Modelo Fisico](./modelo-fisico/)
 
 <!-- Insira abaixo a imagem do modelo físico -->
-![Modelo Físico do Banco de Dados](./modelo-fisico/drawSQL-image-export-2026-05-30.jpg)
-
+![Modelo Físico do Banco de Dados](https://raw.githubusercontent.com/felipeoliveira0211/Sistema-de-assinatura-para-academia/main/Modelo_fisico/drawSQL-image-export-2026-05-30.jpg.jpg)
 ---
 
 ##  Dicionário de Dados
