@@ -44,7 +44,7 @@ As informações sobre as tabelas e índices foram documentadas nas planilhas:
 
 O banco de dados utilizado neste projeto é o **SQL Server**.
 
- Procedure de criação do banco: [Criando SQL](./scripts/criacao-banco.sql)
+ Procedure de criação do banco: [Criando SQL](https://github.com/felipeoliveira0211/Sistema-de-assinatura-para-academia/blob/main/Modelo_fisico/DDL_tabelas_modelo_fisico.sql)
 
 Os scripts estão organizados por tipo:
 
@@ -54,7 +54,7 @@ Os scripts estão organizados por tipo:
 |  Índices | [`scripts/indices.sql`](./scripts/indices.sql) |
 |  Gatilhos | [`scripts/gatilhos.sql`](./scripts/gatilhos.sql) |
 |  Procedimentos Armazenados | [`scripts/procedures.sql`](./scripts/procedures.sql) |
-|  Funções | [`scripts/funcoes.sql`](./scripts/funcoes.sql) |
+|  Funções | [`scripts/funcoes.sql`](https://github.com/felipeoliveira0211/Sistema-de-assinatura-para-academia/blob/main/function.sql) |
 |  DML | [`scripts/dml.sql`](./scripts/dml.sql) |
 
 ---
@@ -79,8 +79,8 @@ Siga as instruções abaixo para reproduzir o projeto em sua máquina.
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone Repositório: https://github.com/felipeoliveira0211/Sistema-de-assinatura-para-academia
+cd Sistema-de-assinatura-para-academia
 ```
 
 ### 2. Configure o banco de dados
