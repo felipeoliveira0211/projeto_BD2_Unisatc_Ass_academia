@@ -57,7 +57,7 @@ CREATE TABLE planos (
 );
 
 
-/* FUNCION¡RIOS */
+/* FUNCION√ÅRIOS */
 
 CREATE TABLE funcionarios (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -227,11 +227,11 @@ CREATE TABLE faturas_pagamento (
         CHECK (status_pagamento IN ('P','C'))
 
     -- P = Pendente
-    -- C = ConcluÌdo
+    -- C = Conclu√≠do
 );
 
 
-/* AVALIA«’ES FÕSICAS */
+/* AVALIA√á√ïES F√çSICAS */
 
 CREATE TABLE avaliacoes_fisicas (
     id INT IDENTITY(1,1) PRIMARY KEY,
@@ -299,7 +299,7 @@ CREATE TABLE acessos_catraca (
         CHECK (sentido_acesso IN ('E','S')),
 
     -- E = Entrada
-    -- S = SaÌda
+    -- S = Sa√≠da
 
     CONSTRAINT CK_TIPO_ACESSO
         CHECK (tipo_acesso IN ('A','V'))
