@@ -1,123 +1,102 @@
-1. Qual academia possui mais alunos cadastrados?
 
+/*PERGUNTAS/*
+-- 1. Planos mais vendidos e receita
+CREATE INDEX IX_ASSINATURAS_PLANO
+ON assinaturas (id_plano);
+
+-- 2. Ticket médio mensal
+CREATE INDEX IX_FATURAS_ASSINATURA_STATUS
+ON faturas_pagamento (id_assinatura, status_pagamento);
+
+-- 3. Pico de horário catraca
+CREATE INDEX IX_ACESSOS_DATA_HORA
+ON acessos_catraca (data_hora_entrada, sentido_acesso);
+
+-- 4. Novos alunos por mês
+CREATE INDEX IX_ALUNOS_DATA_CADASTRO
+ON alunos (data_cadastro);
+
+-- 5. Funcionário com mais vendas
+CREATE INDEX IX_ASSINATURAS_FUNCIONARIO
+ON assinaturas (id_funcionario_venda);
+
+-- 6. Receita total mensal
+CREATE INDEX IX_FATURAS_STATUS_VALOR
+ON faturas_pagamento (status_pagamento, valor_pago);
+
+/*1. Quais são os planos mais vendidos e quais geram maior receita?/*
 SELECT
-    a.nome AS academia,
-    COUNT(al.id) AS total_alunos
-FROM academias a
-INNER JOIN alunos al
-    ON a.id = al.id_academia_registro
-GROUP BY a.nome
-ORDER BY total_alunos DESC;
-------------------------
-CREATE INDEX IX_Alunos_Academia
-ON alunos(id_academia_registro);
-
-2. Quais são os planos mais vendidos?
-
-SELECT TOP 5
-    p.nome,
-    COUNT(a.id) AS total_vendas
+    p.nome AS plano,
+    COUNT(a.id) AS total_assinaturas,
+    SUM(a.valor_acordado) AS receita_gerada
 FROM planos p
 INNER JOIN assinaturas a
     ON p.id = a.id_plano
 GROUP BY p.nome
-ORDER BY total_vendas DESC;
-----------------------
-CREATE INDEX IX_Assinaturas_Plano
-ON assinaturas(id_plano);
+ORDER BY receita_gerada DESC;
 
-3. Quais alunos estão inadimplentes?
-
+/*2. Qual o ticket médio mensal de nossos clientes?/*
 SELECT
-    al.nome_completo,
-    fp.valor_fatura,
-    fp.data_vencimento
-FROM alunos al
-INNER JOIN assinaturas ass
-    ON al.id = ass.id_aluno
-INNER JOIN faturas_pagamento fp
-    ON ass.id = fp.id_assinatura
-WHERE fp.status_pagamento = '3';
---------------------------------
-CREATE INDEX IX_Faturas_Status
-ON faturas_pagamento(status_pagamento);
+    CAST(AVG(gasto_mensal) AS DECIMAL(10,2)) AS ticket_medio
+FROM (
+    SELECT
+        a.id_aluno,
+        SUM(f.valor_pago) AS gasto_mensal
+    FROM faturas_pagamento f
+    INNER JOIN assinaturas a
+        ON a.id = f.id_assinatura
+    WHERE f.status_pagamento = 'C'
+    GROUP BY a.id_aluno
+) AS x;
+/*3. Qual é o pico de horário de acessos nas catracas?/*
+SELECT
+    DATEPART(HOUR, data_hora_entrada) AS hora,
+    COUNT(*) AS quantidade_acessos
+FROM acessos_catraca
+WHERE sentido_acesso = 'E'
+GROUP BY DATEPART(HOUR, data_hora_entrada)
+ORDER BY quantidade_acessos DESC;
 
-4. Qual funcionário realizou mais vendas de assinaturas?
-WITH RankingVendas AS
+/*4. Quantos alunos novos foram captados por mês na academia?/*
+SELECT
+    YEAR(data_cadastro) AS ano,
+    MONTH(data_cadastro) AS mes,
+    COUNT(*) AS novos_alunos
+FROM alunos
+GROUP BY
+    YEAR(data_cadastro),
+    MONTH(data_cadastro)
+ORDER BY ano, mes;
+
+/*5. Qual funcionário mais vendeu assinaturas e qual a receita gerada?(utilizando function)/*
+
+CREATE FUNCTION fn_vendas_funcionario (@id_funcionario INT)
+RETURNS TABLE
+AS
+RETURN
 (
     SELECT
+        f.id AS id_funcionario,
         f.nome_completo,
         COUNT(a.id) AS total_vendas,
-        ROW_NUMBER() OVER
-        (
-            ORDER BY COUNT(a.id) DESC
-        ) AS ranking
+        SUM(a.valor_acordado) AS receita_total
     FROM funcionarios f
     INNER JOIN assinaturas a
         ON f.id = a.id_funcionario_venda
-    GROUP BY f.nome_completo
-)
-
+    WHERE f.id = @id_funcionario
+    GROUP BY f.id, f.nome_completo
+);
+/*puxando a função/*
 SELECT *
-FROM RankingVendas;
---------------------------------
-CREATE INDEX IX_Assinaturas_Funcionario
-ON assinaturas(id_funcionario_venda);
+FROM dbo.fn_vendas_funcionario(1);
 
-5. Qual academia registrou mais acessos na catraca no último mês?
-WITH AcessosMes AS
-(
-    SELECT
-        id_academia,
-        COUNT(*) AS total_acessos
-    FROM acessos_catraca
-    WHERE MONTH(data_hora_entrada) = MONTH(GETDATE())
-      AND YEAR(data_hora_entrada) = YEAR(GETDATE())
-    GROUP BY id_academia
-)
-
+/*6. Qual a receita mensal total da academia?/*
 SELECT
-    a.nome,
-    am.total_acessos
-FROM AcessosMes am
-INNER JOIN academias a
-    ON am.id_academia = a.id
-ORDER BY am.total_acessos DESC;
-------------------------------
-CREATE INDEX IX_Acessos_DataAcademia
-ON acessos_catraca(id_academia, data_hora_entrada);
+    SUM(valor_pago) AS receita_total_mes
+FROM faturas_pagamento
+WHERE status_pagamento = 'C';
 
-6. Quais alunos possuem assinaturas próximas do vencimento?
 
-SELECT
-    al.nome_completo,
-    p.nome AS plano,
-    a.data_fim,
-    DATEDIFF(DAY, GETDATE(), a.data_fim) AS dias_para_vencer
-FROM alunos al
-INNER JOIN assinaturas a
-    ON al.id = a.id_aluno
-INNER JOIN planos p
-    ON a.id_plano = p.id
-WHERE a.data_fim BETWEEN GETDATE() AND DATEADD(DAY, 30, GETDATE())
-ORDER BY a.data_fim;
---------------------------------------------------------
-CREATE INDEX IX_Assinaturas_DataFim
-ON assinaturas(data_fim);
-
-----NOVAS PERGUNTAS-----
-
-1. Quais os principais canais de vendas dos planos?
-
-2. Quais são os planos mais vendidos e quais geram mais receita?
-
-3. Qual é o pico de horário de acessos nas catracas?
-
-4. Quantos alunos novos foram captados por mês na academia?
-
-5. Qual funcionário mais vendeu assinaturas e qual a receita gerada?
-
-6. 
 
 
 
