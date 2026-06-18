@@ -1,101 +1,106 @@
 
 /*PERGUNTAS/*
--- 1. Planos mais vendidos e receita
-CREATE INDEX IX_ASSINATURAS_PLANO
-ON assinaturas (id_plano);
+Pergunta 1
+Quais funcionários venderam mais assinaturas e qual a taxa de cancelamento das vendas feitas por eles?
+Objetivo: avaliar desempenho comercial e qualidade das vendas.
 
--- 2. Ticket médio mensal
-CREATE INDEX IX_FATURAS_ASSINATURA_STATUS
-ON faturas_pagamento (id_assinatura, status_pagamento);
+Usa: JOIN, subconsulta, GROUP BY
 
--- 3. Pico de horário catraca
-CREATE INDEX IX_ACESSOS_DATA_HORA
-ON acessos_catraca (data_hora_entrada, sentido_acesso);
+SELECT
+    f.id AS id_funcionario,
+    f.nome_completo AS funcionario,
+    c.nome AS cargo,
+    COUNT(ass.id) AS total_vendas,
+    SUM(CASE WHEN ass.status_assinatura = 'I' THEN 1 ELSE 0 END) AS vendas_canceladas,
+    CAST(
+        100.0 * SUM(CASE WHEN ass.status_assinatura = 'I' THEN 1 ELSE 0 END)
+        / COUNT(ass.id)
+        AS DECIMAL(5,2)
+    ) AS percentual_cancelamento,
+    (
+        SELECT COUNT(*)
+        FROM assinaturas ass2
+        WHERE ass2.id_funcionario_venda = f.id
+          AND ass2.renovacao_automatica = 1
+    ) AS vendas_com_renovacao_automatica
+FROM funcionarios f
+INNER JOIN cargos c
+    ON c.id = f.id_cargo
+INNER JOIN assinaturas ass
+    ON ass.id_funcionario_venda = f.id
+GROUP BY
+    f.id,
+    f.nome_completo,
+    c.nome
+ORDER BY total_vendas DESC;
 
--- 4. Novos alunos por mês
-CREATE INDEX IX_ALUNOS_DATA_CADASTRO
-ON alunos (data_cadastro);
+Pergunta 2
+Quais planos geram maior faturamento e qual o percentual de inadimplência por plano?
+Objetivo: comparar planos por receita e risco financeiro.
 
--- 5. Funcionário com mais vendas
-CREATE INDEX IX_ASSINATURAS_FUNCIONARIO
-ON assinaturas (id_funcionario_venda);
+Usa: JOIN, agregação, CASE
 
--- 6. Receita total mensal
-CREATE INDEX IX_FATURAS_STATUS_VALOR
-ON faturas_pagamento (status_pagamento, valor_pago);
-
-/*1. Quais são os planos mais vendidos e quais geram maior receita?/*
 SELECT
     p.nome AS plano,
-    COUNT(a.id) AS total_assinaturas,
-    SUM(a.valor_acordado) AS receita_gerada
+    COUNT(DISTINCT ass.id) AS total_assinaturas,
+    SUM(CASE 
+            WHEN fp.status_pagamento = 'C' THEN fp.valor_pago 
+            ELSE 0 
+        END) AS valor_recebido,
+    SUM(CASE 
+            WHEN fp.status_pagamento = 'P' THEN fp.valor_fatura + fp.multa_aplicada 
+            ELSE 0 
+        END) AS valor_pendente,
+    CAST(
+        100.0 * SUM(CASE WHEN fp.status_pagamento = 'P' THEN 1 ELSE 0 END)
+        / COUNT(fp.id)
+        AS DECIMAL(5,2)
+    ) AS percentual_faturas_pendentes
 FROM planos p
-INNER JOIN assinaturas a
-    ON p.id = a.id_plano
+INNER JOIN assinaturas ass
+    ON ass.id_plano = p.id
+INNER JOIN faturas_pagamento fp
+    ON fp.id_assinatura = ass.id
 GROUP BY p.nome
-ORDER BY receita_gerada DESC;
+ORDER BY valor_recebido DESC;
 
-/*2. Qual o ticket médio mensal de nossos clientes?/*
-SELECT
-    CAST(AVG(gasto_mensal) AS DECIMAL(10,2)) AS ticket_medio
-FROM (
+Pergunta 3
+Quais são os alunos mais frequentes no mês e qual posição eles ocupam no ranking?
+Objetivo: identificar alunos mais engajados.
+
+Usa: CTE, JOIN, função de janela RANK
+
+WITH frequencia_mensal AS (
     SELECT
-        a.id_aluno,
-        SUM(f.valor_pago) AS gasto_mensal
-    FROM faturas_pagamento f
-    INNER JOIN assinaturas a
-        ON a.id = f.id_assinatura
-    WHERE f.status_pagamento = 'C'
-    GROUP BY a.id_aluno
-) AS x;
-/*3. Qual é o pico de horário de acessos nas catracas?/*
+        a.id AS id_aluno,
+        a.nome_completo,
+        p.nome AS plano,
+        COUNT(ac.id) AS total_acessos
+    FROM alunos a
+    INNER JOIN assinaturas ass
+        ON ass.id_aluno = a.id
+    INNER JOIN planos p
+        ON p.id = ass.id_plano
+    INNER JOIN acessos_catraca ac
+        ON ac.id_aluno = a.id
+    WHERE ac.sentido_acesso = 'E'
+      AND ac.tipo_acesso = 'A'
+      AND MONTH(ac.data_hora_entrada) = 1
+      AND YEAR(ac.data_hora_entrada) = 2026
+      AND ass.status_assinatura = 'A'
+    GROUP BY
+        a.id,
+        a.nome_completo,
+        p.nome
+)
 SELECT
-    DATEPART(HOUR, data_hora_entrada) AS hora,
-    COUNT(*) AS quantidade_acessos
-FROM acessos_catraca
-WHERE sentido_acesso = 'E'
-GROUP BY DATEPART(HOUR, data_hora_entrada)
-ORDER BY quantidade_acessos DESC;
-
-/*4. Quantos alunos novos foram captados por mês na academia?/*
-SELECT
-    YEAR(data_cadastro) AS ano,
-    MONTH(data_cadastro) AS mes,
-    COUNT(*) AS novos_alunos
-FROM alunos
-GROUP BY
-    YEAR(data_cadastro),
-    MONTH(data_cadastro)
-ORDER BY ano, mes;
-
-/*5. Qual funcionário mais vendeu assinaturas e qual a receita gerada?(utilizando function)/*
-
-CREATE FUNCTION fn_vendas_funcionario (@id_funcionario INT)
-RETURNS TABLE
-AS
-RETURN
-(
-    SELECT
-        f.id AS id_funcionario,
-        f.nome_completo,
-        COUNT(a.id) AS total_vendas,
-        SUM(a.valor_acordado) AS receita_total
-    FROM funcionarios f
-    INNER JOIN assinaturas a
-        ON f.id = a.id_funcionario_venda
-    WHERE f.id = @id_funcionario
-    GROUP BY f.id, f.nome_completo
-);
-/*puxando a função/*
-SELECT *
-FROM dbo.fn_vendas_funcionario(1);
-
-/*6. Qual a receita mensal total da academia?/*
-SELECT
-    SUM(valor_pago) AS receita_total_mes
-FROM faturas_pagamento
-WHERE status_pagamento = 'C';
-
+    id_aluno,
+    nome_completo,
+    plano,
+    total_acessos,
+    RANK() OVER (ORDER BY total_acessos DESC) AS posicao_ranking
+FROM frequencia_mensal
+ORDER BY posicao_ranking;
 
 
 
