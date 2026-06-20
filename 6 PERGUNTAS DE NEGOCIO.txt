@@ -1,10 +1,10 @@
 
 /*PERGUNTAS/*
-Pergunta 1
+--Pergunta 1
 Quais funcionários venderam mais assinaturas e qual a taxa de cancelamento das vendas feitas por eles?
 Objetivo: avaliar desempenho comercial e qualidade das vendas.
 
-Usa: JOIN, subconsulta, GROUP BY
+Usa: JOIN, subconsulta, GROUP BY--
 
 SELECT
     f.id AS id_funcionario,
@@ -34,11 +34,11 @@ GROUP BY
     c.nome
 ORDER BY total_vendas DESC;
 
-Pergunta 2
+--Pergunta 2
 Quais planos geram maior faturamento e qual o percentual de inadimplência por plano?
 Objetivo: comparar planos por receita e risco financeiro.
 
-Usa: JOIN, agregação, CASE
+Usa: JOIN, agregação, CASE--
 
 SELECT
     p.nome AS plano,
@@ -64,11 +64,11 @@ INNER JOIN faturas_pagamento fp
 GROUP BY p.nome
 ORDER BY valor_recebido DESC;
 
-Pergunta 3
+--Pergunta 3
 Quais são os alunos mais frequentes no mês e qual posição eles ocupam no ranking?
 Objetivo: identificar alunos mais engajados.
 
-Usa: CTE, JOIN, função de janela RANK
+Usa: CTE, JOIN, função de janela RANK--
 
 WITH frequencia_mensal AS (
     SELECT
@@ -85,7 +85,7 @@ WITH frequencia_mensal AS (
         ON ac.id_aluno = a.id
     WHERE ac.sentido_acesso = 'E'
       AND ac.tipo_acesso = 'A'
-      AND MONTH(ac.data_hora_entrada) = 1
+      AND MONTH(ac.data_hora_entrada) = 5
       AND YEAR(ac.data_hora_entrada) = 2026
       AND ass.status_assinatura = 'A'
     GROUP BY
@@ -104,11 +104,124 @@ ORDER BY posicao_ranking;
 
 
 
+--PERGUNTAS FILIPE--
+
+--Pergunta 4
+Quais alunos ativos possuem faturas pendentes vencidas e qual o valor total em atraso?
+
+Objetivo: identificar alunos inadimplentes que podem ter acesso bloqueado.
+
+Usa: CTE, JOIN, GROUP BY, função--
+
+WITH faturas_vencidas AS (
+    SELECT
+        fp.id_assinatura,
+        COUNT(fp.id) AS qtd_faturas_vencidas,
+        SUM(fp.valor_fatura + fp.multa_aplicada) AS valor_total_em_atraso,
+        MIN(fp.data_vencimento) AS vencimento_mais_antigo
+    FROM faturas_pagamento fp
+    WHERE fp.status_pagamento = 'P'
+      AND fp.data_vencimento < CAST(GETDATE() AS DATE)
+    GROUP BY fp.id_assinatura
+)
+SELECT
+    a.id AS id_aluno,
+    a.nome_completo,
+    dbo.fn_calcular_idade(a.data_nascimento) AS idade,
+    p.nome AS plano,
+    fv.qtd_faturas_vencidas,
+    fv.valor_total_em_atraso,
+    fv.vencimento_mais_antigo
+FROM faturas_vencidas fv
+INNER JOIN assinaturas ass
+    ON ass.id = fv.id_assinatura
+INNER JOIN alunos a
+    ON a.id = ass.id_aluno
+INNER JOIN planos p
+    ON p.id = ass.id_plano
+WHERE a.ativo = 1
+  AND ass.status_assinatura = 'A'
+ORDER BY fv.valor_total_em_atraso DESC;
 
 
+--Pergunta 5
+Quais dias da semana e horários possuem maior movimentação na catraca?
+
+Objetivo: entender horários de pico da academia.
+
+Usa: CTE, GROUP BY, DATEPART--
+
+WITH movimento_horario AS (
+    SELECT
+        DATENAME(WEEKDAY, data_hora_entrada) AS dia_semana,
+        DATEPART(HOUR, data_hora_entrada) AS hora,
+        COUNT(*) AS total_acessos,
+        SUM(CASE WHEN tipo_acesso = 'A' THEN 1 ELSE 0 END) AS acessos_alunos,
+        SUM(CASE WHEN tipo_acesso = 'V' THEN 1 ELSE 0 END) AS acessos_visitantes
+    FROM acessos_catraca
+    WHERE sentido_acesso = 'E'
+    GROUP BY
+        DATENAME(WEEKDAY, data_hora_entrada),
+        DATEPART(HOUR, data_hora_entrada)
+)
+SELECT
+    dia_semana,
+    hora,
+    total_acessos,
+    acessos_alunos,
+    acessos_visitantes,
+    CAST(
+        100.0 * acessos_visitantes / total_acessos
+        AS DECIMAL(5,2)
+    ) AS percentual_visitantes
+FROM movimento_horario
+ORDER BY total_acessos DESC;
 
 
+--Pergunta 6
+Quais alunos tiveram melhora na composição corporal entre a primeira e a última avaliação?
 
+Objetivo: verificar evolução dos alunos acompanhados pela academia.
+
+Usa: CTE, função de janela ROW_NUMBER, JOIN--
+
+WITH avaliacoes_ordenadas AS (
+    SELECT
+        af.id_aluno,
+        a.nome_completo,
+        af.data_avaliacao,
+        af.peso_kg,
+        af.percentual_gordura,
+        af.massa_magra,
+        ROW_NUMBER() OVER (
+            PARTITION BY af.id_aluno 
+            ORDER BY af.data_avaliacao ASC
+        ) AS primeira_avaliacao,
+        ROW_NUMBER() OVER (
+            PARTITION BY af.id_aluno 
+            ORDER BY af.data_avaliacao DESC
+        ) AS ultima_avaliacao
+    FROM avaliacoes_fisicas af
+    INNER JOIN alunos a
+        ON a.id = af.id_aluno
+)
+SELECT
+    primeira.nome_completo,
+    primeira.data_avaliacao AS data_primeira_avaliacao,
+    ultima.data_avaliacao AS data_ultima_avaliacao,
+    primeira.percentual_gordura AS gordura_inicial,
+    ultima.percentual_gordura AS gordura_atual,
+    primeira.massa_magra AS massa_magra_inicial,
+    ultima.massa_magra AS massa_magra_atual,
+    primeira.percentual_gordura - ultima.percentual_gordura AS reducao_gordura,
+    ultima.massa_magra - primeira.massa_magra AS ganho_massa_magra
+FROM avaliacoes_ordenadas primeira
+INNER JOIN avaliacoes_ordenadas ultima
+    ON ultima.id_aluno = primeira.id_aluno
+WHERE primeira.primeira_avaliacao = 1
+  AND ultima.ultima_avaliacao = 1
+  AND primeira.data_avaliacao <> ultima.data_avaliacao
+ORDER BY reducao_gordura DESC;
 
 
 
