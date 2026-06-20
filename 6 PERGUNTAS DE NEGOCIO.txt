@@ -2,9 +2,17 @@
 /*PERGUNTAS/*
 --Pergunta 1
 Quais funcionários venderam mais assinaturas e qual a taxa de cancelamento das vendas feitas por eles?
+
 Objetivo: avaliar desempenho comercial e qualidade das vendas.
 
 Usa: JOIN, subconsulta, GROUP BY--
+
+CREATE NONCLUSTERED INDEX IX_assinaturas_funcionario_status_renovacao
+ON assinaturas (
+    id_funcionario_venda,
+    status_assinatura,
+    renovacao_automatica
+);
 
 SELECT
     f.id AS id_funcionario,
@@ -36,9 +44,16 @@ ORDER BY total_vendas DESC;
 
 --Pergunta 2
 Quais planos geram maior faturamento e qual o percentual de inadimplência por plano?
+
 Objetivo: comparar planos por receita e risco financeiro.
 
 Usa: JOIN, agregação, CASE--
+
+CREATE NONCLUSTERED INDEX IX_faturas_assinatura_status
+ON faturas_pagamento (
+    id_assinatura,
+    status_pagamento
+);
 
 SELECT
     p.nome AS plano,
@@ -66,9 +81,18 @@ ORDER BY valor_recebido DESC;
 
 --Pergunta 3
 Quais são os alunos mais frequentes no mês e qual posição eles ocupam no ranking?
+
 Objetivo: identificar alunos mais engajados.
 
 Usa: CTE, JOIN, função de janela RANK--
+
+CREATE NONCLUSTERED INDEX IX_acessos_aluno_data_tipo
+ON acessos_catraca (
+    id_aluno,
+    data_hora_entrada,
+    sentido_acesso,
+    tipo_acesso
+);
 
 WITH frequencia_mensal AS (
     SELECT
