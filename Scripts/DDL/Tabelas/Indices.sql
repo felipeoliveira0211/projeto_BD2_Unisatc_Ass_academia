@@ -1,4 +1,12 @@
 --índice pergunta 1
+CREATE NONCLUSTERED INDEX IX_funcionarios_cargo
+ON funcionarios (id_cargo)
+INCLUDE (id, nome_completo);
+
+CREATE NONCLUSTERED INDEX IX_cargos_id_nome
+ON cargos (id)
+INCLUDE (nome);
+
 CREATE NONCLUSTERED INDEX IX_assinaturas_funcionario_status_renovacao
 ON assinaturas (
     id_funcionario_venda,
@@ -11,6 +19,14 @@ ON faturas_pagamento (
     id_assinatura,
     status_pagamento
 );
+
+CREATE NONCLUSTERED INDEX IX_assinaturas_plano_id
+ON assinaturas (id_plano)
+INCLUDE (id);
+
+CREATE NONCLUSTERED INDEX IX_faturas_assinatura_status_valores
+ON faturas_pagamento (id_assinatura, status_pagamento)
+INCLUDE (valor_pago, valor_fatura, multa_aplicada);
 --índice pergunta 3
 CREATE NONCLUSTERED INDEX IX_acessos_aluno_data_tipo
 ON acessos_catraca (
@@ -18,7 +34,15 @@ ON acessos_catraca (
     data_hora_entrada,
     sentido_acesso,
     tipo_acesso
-);
+); 
+
+CREATE NONCLUSTERED INDEX IX_assinaturas_aluno_status_plano
+ON assinaturas (id_aluno, status_assinatura)
+INCLUDE (id_plano);
+
+CREATE NONCLUSTERED INDEX IX_planos_id_nome
+ON planos (id)
+INCLUDE (nome);
 --índice pergunta 4
 CREATE INDEX IX_faturas_pagamento_status_vencimento_assinatura
 ON faturas_pagamento (
