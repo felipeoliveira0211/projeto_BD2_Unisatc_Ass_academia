@@ -7,6 +7,14 @@ Objetivo: avaliar desempenho comercial e qualidade das vendas.
 
 Usa: JOIN, subconsulta, GROUP BY--
 
+CREATE NONCLUSTERED INDEX IX_funcionarios_cargo
+ON funcionarios (id_cargo)
+INCLUDE (id, nome_completo);
+
+CREATE NONCLUSTERED INDEX IX_cargos_id_nome
+ON cargos (id)
+INCLUDE (nome);
+
 CREATE NONCLUSTERED INDEX IX_assinaturas_funcionario_status_renovacao
 ON assinaturas (
     id_funcionario_venda,
@@ -49,6 +57,14 @@ Objetivo: comparar planos por receita e risco financeiro.
 
 Usa: JOIN, agregação, CASE--
 
+CREATE NONCLUSTERED INDEX IX_assinaturas_plano_id
+ON assinaturas (id_plano)
+INCLUDE (id);
+
+CREATE NONCLUSTERED INDEX IX_faturas_assinatura_status_valores
+ON faturas_pagamento (id_assinatura, status_pagamento)
+INCLUDE (valor_pago, valor_fatura, multa_aplicada);
+
 CREATE NONCLUSTERED INDEX IX_faturas_assinatura_status
 ON faturas_pagamento (
     id_assinatura,
@@ -85,6 +101,14 @@ Quais são os alunos mais frequentes no mês e qual posição eles ocupam no ran
 Objetivo: identificar alunos mais engajados.
 
 Usa: CTE, JOIN, função de janela RANK--
+
+CREATE NONCLUSTERED INDEX IX_assinaturas_aluno_status_plano
+ON assinaturas (id_aluno, status_assinatura)
+INCLUDE (id_plano);
+
+CREATE NONCLUSTERED INDEX IX_planos_id_nome
+ON planos (id)
+INCLUDE (nome);
 
 CREATE NONCLUSTERED INDEX IX_acessos_aluno_data_tipo
 ON acessos_catraca (
