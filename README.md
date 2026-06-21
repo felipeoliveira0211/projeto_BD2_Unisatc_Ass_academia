@@ -50,12 +50,12 @@ Os scripts estão organizados por tipo:
 
 | Tipo | Arquivo |
 |------|---------|
-|  Tabelas | [`scripts/tabelas.sql`](./scripts/tabelas.sql) |
-|  Índices | [`scripts/indices.sql`](./scripts/indices.sql) |
-|  Gatilhos | [`scripts/gatilhos.sql`](./scripts/gatilhos.sql) |
-|  Procedimentos Armazenados | [`scripts/procedures.sql`](./scripts/procedures.sql) |
-|  Funções | [`scripts/funcoes.sql`](https://github.com/felipeoliveira0211/Sistema-de-assinatura-para-academia/blob/main/function.sql) |
-|  DML | [`scripts/dml.sql`](./scripts/dml.sql) |
+| Tabelas | [`scripts/tabelas.sql`](./Scripts/DDL/Tabelas/Criação_tabelas.sql) |
+| Índices | [`scripts/indices.sql`](./Scripts/DDL/Tabelas/Indices.sql) |
+| Gatilhos | Em desenvolvimento |
+| Procedimentos Armazenados | Em desenvolvimento |
+| Funções | [`scripts/funcoes.sql`](./Scripts/DDL/Tabelas/function.sql) |
+| DML | [`scripts/dml.sql`](./Scripts/DML/INSERTS_MASSA_DADOS_TABELAS.sql) |
 
 ---
 
@@ -65,10 +65,8 @@ Os scripts estão organizados por tipo:
 
 - **Linguagem de Programação:** PHP
 - **Banco de Dados:** SQL Server
-- **ORM:** Entity Framework
 - **Ferramenta de Modelagem:** drawSQL
 
->  *Adicione aqui as demais tecnologias utilizadas no desenvolvimento do CRUD.*
 
 ---
 
@@ -85,18 +83,32 @@ cd Sistema-de-assinatura-para-academia
 
 ### 2. Configure o banco de dados
 
+Execute os scripts na seguinte ordem no **SQL Server Management Studio (SSMS)**:
+
 ```sql
--- Execute o script de criação do banco
--- scripts/criacao-banco.sql
+-- 1. Crie as tabelas
+-- Scripts/DDL/Tabelas/Criação_tabelas.sql
+
+-- 2. Crie os índices
+-- Scripts/DDL/Tabelas/Indices.sql
+
+-- 3. Popule o banco
+-- (script DML)
 ```
 
->  *Adicione aqui as demais instruções de configuração e execução.*
+---
+### 3. Configure o CRUD em PHP
+
+- Abra a pasta `Crud/` no seu editor
+- Edite o arquivo de conexão com as credenciais do seu SQL Server
+- Suba o projeto em um servidor local (XAMPP, Laragon, etc.)
+- Acesse via navegador: `http://localhost/Crud`
 
 ---
 
-##  Código Fonte
+## Código Fonte
 
-O código fonte completo está disponível na pasta [`/src`](./src/).
+O código fonte do CRUD está disponível na pasta [`/Crud`](./Crud/).
 
 ---
 
@@ -108,8 +120,10 @@ O relatório final está disponível em [`relatorio-final/template1.docx`](./rel
 
 ##  Referências Bibliográficas
 
->  *Adicione aqui as referências de artigos, links, vídeos, repositórios e livros utilizados no desenvolvimento do projeto.*
+- [Documentação SQL Server — Microsoft](https://learn.microsoft.com/pt-br/sql/sql-server/)
+- [drawSQL — Ferramenta de modelagem](https://drawsql.app/)
+- [PHP Manual](https://www.php.net/manual/pt_BR/)
 
 ---
 
-<p align="center">Desenvolvido para a disciplina de Atividades Especiais</p>
+<p align="center">Desenvolvido para a disciplina de <strong>Banco de Dados II</strong></p>
