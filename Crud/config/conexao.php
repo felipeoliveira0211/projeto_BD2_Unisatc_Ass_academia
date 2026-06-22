@@ -3,7 +3,7 @@
 
 $serverName = "DESKTOP-MD4L3DQ\\SQLEXPRESS";  
 $database = "3gfit";                           
-$uid = "";                                      
+$uid = "";                               
 $pwd = "";                                      
 
 try {
