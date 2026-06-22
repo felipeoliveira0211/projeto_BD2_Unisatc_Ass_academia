@@ -1,15 +1,20 @@
-<!-- Script para conexão do PHP ao banco SQL SERVER. -->
- 
 <?php
-$serverName = "localhost"; 
-$database = "3gfit"; 
-$uid = "3gfit";
-$pwd = "3gfit";
+// ========== CONFIGURAÇÃO PARA SQL SERVER EXPRESS ==========
+
+$serverName = "DESKTOP-MD4L3DQ\\SQLEXPRESS";  
+$database = "3gfit";                           
+$uid = "";                                      
+$pwd = "";                                      
 
 try {
-    $conn = new PDO("sqlsrv:server=$serverName;Database=$database", $uid, $pwd);
+    $conn = new PDO(
+        "sqlsrv:server=$serverName;Database=$database;Trusted_Connection=yes",
+        $uid, 
+        $pwd
+    );
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
 } catch(PDOException $e) {
-    die("Erro na conexão: " . $e->getMessage());
+    die("❌ ERRO NA CONEXÃO: " . $e->getMessage());
 }
 ?>
