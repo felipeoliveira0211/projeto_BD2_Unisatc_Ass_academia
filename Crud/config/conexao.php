@@ -1,20 +1,16 @@
 <?php
-// ========== CONFIGURAÇÃO PARA SQL SERVER EXPRESS ==========
 
-$serverName = "DESKTOP-MD4L3DQ\\SQLEXPRESS";  
-$database = "3gfit";                           
-$uid = "";                               
-$pwd = "";                                      
+$serverName = "DESKTOP-MD4L3DQ\\SQLEXPRESS";
 
-try {
-    $conn = new PDO(
-        "sqlsrv:server=$serverName;Database=$database;Trusted_Connection=yes",
-        $uid, 
-        $pwd
-    );
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-} catch(PDOException $e) {
-    die("❌ ERRO NA CONEXÃO: " . $e->getMessage());
+$connectionOptions = [
+    "Database" => "3gfit",
+    "Trusted_Connection" => true
+];
+
+$conn = sqlsrv_connect($serverName, $connectionOptions);
+
+if ($conn) {
+    echo "Conectado com sucesso!";
+} else {
+    die(print_r(sqlsrv_errors(), true));
 }
-?>
