@@ -1,24 +1,27 @@
 <?php
 if (isset($_GET['id']) && !empty($_GET['id'])) {
-    
+
     require_once 'config/conexao.php';
+
     $id = (int) $_GET['id'];
 
-    try {
-        $sql = "SELECT id, nome, descricao, valor_mensal, taxa_adesao, duracao_meses, limite_acessos_diarios, ativo FROM planos WHERE id = :id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        
-        $plano = $stmt->fetch(PDO::FETCH_ASSOC);
+    $sql = "SELECT id, nome, descricao, valor_mensal, taxa_adesao, duracao_meses, limite_acessos_diarios, ativo 
+            FROM planos 
+            WHERE id = ?";
 
-        if (!$plano) {
-            header("Location: index.php");
-            exit();
-        }
+    $params = array($id);
 
-    } catch (PDOException $e) {
-        die("Erro ao buscar dados do plano: " . $e->getMessage());
+    $stmt = sqlsrv_query($conn, $sql, $params);
+
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+    $plano = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
+    if (!$plano) {
+        header("Location: index.php");
+        exit();
     }
 
 } else {

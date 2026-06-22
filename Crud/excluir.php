@@ -1,25 +1,22 @@
 <?php
 if (isset($_GET['id']) && !empty($_GET['id'])) {
-    
+
     require_once 'config/conexao.php';
-    
+
     $id = (int) $_GET['id'];
 
-    try {
-        $sql = "DELETE FROM planos WHERE id = :id";
-        
-        $stmt = $conn->prepare($sql);
-        
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        
-        $stmt->execute();
-        
-        header("Location: index.php");
-        exit();
+    $sql = "DELETE FROM planos WHERE id = ?";
 
-    } catch (PDOException $e) {
-        die("Erro ao excluir o plano: O registro pode estar sendo usado por outra tabela. Detalhes: " . $e->getMessage());
+    $params = array($id);
+
+    $stmt = sqlsrv_query($conn, $sql, $params);
+
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true));
     }
+
+    header("Location: index.php");
+    exit();
 
 } else {
     header("Location: index.php");

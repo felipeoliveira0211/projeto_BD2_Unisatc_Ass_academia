@@ -1,15 +1,21 @@
 <?php
 require_once 'config/conexao.php';
 
-try {
-    $query = "SELECT id, nome, descricao, valor_mensal, taxa_adesao, duracao_meses, limite_acessos_diarios, ativo FROM planos";
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
-    $planos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Erro ao buscar planos: " . $e->getMessage());
+$query = "SELECT id, nome, descricao, valor_mensal, taxa_adesao, duracao_meses, limite_acessos_diarios, ativo FROM planos";
+
+$stmt = sqlsrv_query($conn, $query);
+
+if ($stmt === false) {
+    die(print_r(sqlsrv_errors(), true));
+}
+
+$planos = [];
+
+while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    $planos[] = $row;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
