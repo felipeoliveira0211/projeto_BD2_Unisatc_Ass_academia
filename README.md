@@ -52,8 +52,8 @@ Os scripts estão organizados por tipo:
 |------|---------|
 | Tabelas | [`scripts/tabelas.sql`](./Scripts/DDL/Tabelas/Criação_tabelas.sql) |
 | Índices | [`scripts/indices.sql`](./Scripts/DDL/Tabelas/Indices.sql) |
-| Gatilhos | Em desenvolvimento |
-| Procedimentos Armazenados | Em desenvolvimento |
+| Gatilhos | [`scripts/gatilhos.sql`](./trigger/trigger.sql) |
+| Procedimentos Armazenados | [`scripts/procedures.sql`](./procedure/storedProcedure.sql) |
 | Funções | [`scripts/funcoes.sql`](./Scripts/DDL/Tabelas/function.sql) |
 | DML | [`scripts/dml.sql`](./Scripts/DML/INSERTS_MASSA_DADOS_TABELAS.sql) |
 
