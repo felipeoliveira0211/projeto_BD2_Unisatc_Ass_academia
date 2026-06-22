@@ -35,9 +35,7 @@ Utilizamos a ferramenta [drawSQL](https://drawsql.app/) para a criação do mode
 
 As informações sobre as tabelas e índices foram documentadas nas planilhas:
 
--  [`Dicionario_pt1.xlsx`](https://github.com/felipeoliveira0211/projeto_BD2_Unisatc_Ass_academia/blob/main/Dicionario_dados/Dicionario_pt1.xlsx)
--  [`Dicionario_pt2.xlsx`](https://github.com/felipeoliveira0211/projeto_BD2_Unisatc_Ass_academia/blob/main/Dicionario_dados/Dicionario_pt2.xlsx)
-
+| Dicionário de Dados | [`dicionario_dados.xlsx`](./Dicionario_dados/Dicionário%20de%20Dados.xlsx) |
 ---
 
 ##  Scripts SQL
@@ -114,7 +112,7 @@ O código fonte do CRUD está disponível na pasta [`/Crud`](./Crud/).
 
 ##  Relatório Final
 
-O relatório final está disponível em [`relatorio-final/template1.docx`](./relatorio-final/template1.docx).
+| Relatório Final | [`relatorio_final.pdf`](./relatorio-final/RELATORIO%20FINAL%20ASSINATURA%20ACADEMIA..pdf) |
 
 ---
 
